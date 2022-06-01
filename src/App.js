@@ -1,23 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [advice,setAdvice] = useState('');
+
+  const getAdvice = () => {
+    axios.get('https://api.quotable.io/random')
+    .then((res) => {
+      setAdvice('');
+      console.log(res.data);
+      setAdvice(res.data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  useEffect(() => {
+    getAdvice();
+  },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="card">
+        <h1 className="heading">{advice.content}</h1>
+        <button className="button" onClick={() => getAdvice()}>
+          <span>GIVE ME ADVICE</span>
+        </button>
+      </div>
     </div>
   );
 }
